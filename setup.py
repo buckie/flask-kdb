@@ -1,9 +1,9 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='flask-kdb',
     version='0.1',
-    packages=[
+    py_modules=[
         'flask_kdb'
     ],
     url='github.com/buckie/flask-kdb',
@@ -16,7 +16,7 @@ setup(
     description='KDB connection wrapper for Flask based on qPython',
     install_requires=[
         'Flask>=0.8',
-        'qPython>=1.0'
+        'qPython>=1.0.Beta.1'
     ],
     classifiers=[
         'Development Status :: 5 - Beta',
