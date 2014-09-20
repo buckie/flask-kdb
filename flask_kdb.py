@@ -19,7 +19,7 @@ def get_kdb(mode='c'):
     return current_app.extensions['kdb'].connection()
 
 
-class _KDB(object):
+class KDB(object):
     default_config = (
         ('host', 'localhost'),
         ('port', 5000),
