@@ -8,7 +8,7 @@ from qpython import qconnection
 from qpython.qconnection import QConnectionException
 
 
-def get_kdb(mode='c'):
+def get_kdb():
     """Get an instance of kdb.
 
     This function will return a ``qpython.qconnection`` instance.
@@ -16,7 +16,7 @@ def get_kdb(mode='c'):
     the current flask app (using ``flask.current_app``).
 
     """
-    return current_app.extensions['kdb'].connection()
+    return current_app.extensions['kdb'].connection
 
 
 class KDB(object):

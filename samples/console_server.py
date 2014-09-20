@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_kdb import KDB
+from flask_kdb import KDB, get_kdb
 
 app = Flask(__name__)
 q = KDB(app)
@@ -8,7 +8,8 @@ q = KDB(app)
 def run_query(query):
     print query
     query = query.encode('ascii')
-    data = q.connection(query)
+    conn = get_kdb()
+    data = conn(query)
     return str(data)
 
 
