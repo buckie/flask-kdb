@@ -11,5 +11,11 @@ Outside of Flask >= 0.8 and qPython >= 1.0.Beta.4 nothing is really required -- 
 
 The requirements file does not have qPython listed as it is not available on PyPI yet, go to the repo to install it.
 
+## qREPL Demo
+
+Just a simple demo to test out the functionality of the extension. It has its own set of requirements
+
+![alt tag](https://raw.github.com/buckie/flask-kdb/master/sample/qREPL/demo.png)
+
 
 
