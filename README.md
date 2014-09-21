@@ -15,7 +15,7 @@ The requirements file does not have qPython listed as it is not available on PyP
 
 Just a simple demo to test out the functionality of the extension. It has its own set of requirements
 
-![alt tag](https://raw.github.com/buckie/flask-kdb/master/sample/qREPL/demo.png)
+![alt tag](https://raw.github.com/buckie/flask-kdb/master/samples/qREPL/demo.png)
 
 
 
