@@ -17,7 +17,16 @@
     <![endif]-->
   </head>
   <body>
-
+    {% with errors = get_flashed_messages(category_filter=["qerror"]) %}
+    {% if errors %}
+        {%- for msg in errors %}
+        <div class="alert alert-danger alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <strong>Unhelpful or Illegible Q Error:</strong> {{ msg }}
+        </div>
+        {% endfor -%}
+    {% endif %}
+    {% endwith %}
     <h1 class="text-center">Simple q REPL</h1>
     <div class="container">
         <div class="row">
@@ -42,12 +51,18 @@
             </div>
             <div class="col-lg-8">
                 <form action="{{ url_for('run_query') }}" class="form-horizontal" method="POST" role="form" >
-                            {% if orig_query %}
-                                <textarea id="queryText" name="queryText" class="form-control" rows="{{ qstatus|length + 2 }}" placeholder="Enter Query Text Here">{{ orig_query }}</textarea>
-                            {% else %}
-                                <textarea id="queryText" name="queryText" class="form-control" rows="{{ qstatus|length + 2 }}" placeholder="Enter Query Text Here"></textarea>
-                            {% endif %}
-                            <button type="submit" class="btn btn-default">Run</button>
+                    {% if orig_query %}
+                        <textarea id="queryText" name="queryText" class="form-control" rows="{{ qstatus|length + 2 }}" placeholder="Enter Query Text Here">{{ orig_query }}</textarea>
+                    {% else %}
+                        <textarea id="queryText" name="queryText" class="form-control" rows="{{ qstatus|length + 2 }}" placeholder="Enter Query Text Here"></textarea>
+                    {% endif %}
+                    <button type="submit" class="btn btn-default">Run</button>
+                    <div class="checkbox-inline">
+                    <label class="checkbox-inline">
+                      <input type="checkbox" name="stripNewline" id="newlineCheckbox" value="option1" checked>
+                        Treat multiline queries as a single command
+                    </label>
+                    </div>
                 </form>
             </div>
         </div>
