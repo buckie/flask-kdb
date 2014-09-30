@@ -4,7 +4,7 @@ from flask_kdb import get_kdb
 from . import app
 from qpython.qcollection import QTable, QKeyedTable, QList, QDictionary, QTemporalList
 from pandas import DataFrame
-
+from .convert import qtable_to_dataframe
 
 @app.before_first_request
 def set_query():
@@ -66,10 +66,8 @@ def get_q_status(q_conn):
 
 
 def convert_qdata(data):
-    if isinstance(data, QTable):
+    if isinstance(data, QTable) or isinstance(data, QKeyedTable) or isinstance(data, QDictionary):
         html = qtable_to_html(data)
-    elif isinstance(data, QKeyedTable) or isinstance(data, QDictionary):
-        html = qtable_to_html(data.values, keys=data.keys)
     elif isinstance(data, QList):
         html = "<samp>{}</samp>".format(str(data.tolist()))
     elif isinstance(data, QTemporalList):
@@ -84,7 +82,7 @@ def convert_qtemporal(data):
     return sane
 
 
-def qtable_to_html(values, keys=None):
-    html = DataFrame(values, index=keys).to_html(
+def qtable_to_html(q_table):
+    html = qtable_to_dataframe(q_table).to_html(
         max_rows=100, escape=False).replace('border="1" class="dataframe"', 'class="table table-striped"')
     return html
