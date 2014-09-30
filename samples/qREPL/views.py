@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, session, flash
 from qpython.qtype import QException
+
 from flask_kdb import get_kdb
 from . import app
-from qpython.qcollection import QTable, QKeyedTable, QList, QDictionary, QTemporalList
-from pandas import DataFrame
-from .convert import qtable_to_dataframe
+from .convert import get_q_status, convert_qdata
+
 
 @app.before_first_request
 def set_query():
@@ -54,35 +54,4 @@ def run_query():
     return redirect('/')
 
 
-def get_q_status(q_conn):
-    status = (
-        ('Is Connected', str(q_conn.is_connected())),
-        ('Protocol Version', str(q_conn.protocol_version)),
-        ('Host', str(q_conn.host)),
-        ('Port', str(q_conn.port)),
-        ('Timeout', str(q_conn.timeout))
-    )
-    return status
 
-
-def convert_qdata(data):
-    if isinstance(data, QTable) or isinstance(data, QKeyedTable) or isinstance(data, QDictionary):
-        html = qtable_to_html(data)
-    elif isinstance(data, QList):
-        html = "<samp>{}</samp>".format(str(data.tolist()))
-    elif isinstance(data, QTemporalList):
-        html = "<samp>{}</samp>".format(str(convert_qtemporal(data)))
-    else:
-        html = "<samp>{}</samp>".format(str(data))
-    return html
-
-
-def convert_qtemporal(data):
-    sane = [str(i.raw) for i in data]
-    return sane
-
-
-def qtable_to_html(q_table):
-    html = qtable_to_dataframe(q_table).to_html(
-        max_rows=100, escape=False).replace('border="1" class="dataframe"', 'class="table table-striped"')
-    return html

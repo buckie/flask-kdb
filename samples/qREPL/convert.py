@@ -1,11 +1,11 @@
-__all__ = ['qList_to_pd_series', 'qtable_to_dataframe', 'qTempList_to_pd_tseries']
+__all__ = ['qList_to_pd_series', 'qtable_to_dataframe', 'qTempList_to_pd_tseries', 'get_q_status', 'convert_qdata']
 
 from collections import OrderedDict
 
 import pandas
 import numpy
 
-from qpython.qcollection import QTable, QKeyedTable, QDictionary
+from qpython.qcollection import QTable, QKeyedTable, QDictionary, QList, QTemporalList
 from qpython.qtype import qnull, QMONTH, QDATE, QDATETIME, QMINUTE, QSECOND, QTIME, QTIMESTAMP, QTIMESPAN, QNULLMAP
 
 _EPOCH_QMONTH = numpy.timedelta64(360, 'M')
@@ -167,3 +167,35 @@ def qList_to_pd_series(q_list, q_type):
     return pandas.Series(data=q_list).replace(null, numpy.NaN)
 
 
+def get_q_status(q_conn):
+    status = (
+        ('Is Connected', str(q_conn.is_connected())),
+        ('Protocol Version', str(q_conn.protocol_version)),
+        ('Host', str(q_conn.host)),
+        ('Port', str(q_conn.port)),
+        ('Timeout', str(q_conn.timeout))
+    )
+    return status
+
+
+def convert_qdata(data):
+    if isinstance(data, QTable) or isinstance(data, QKeyedTable) or isinstance(data, QDictionary):
+        html = qtable_to_html(data)
+    elif isinstance(data, QList):
+        html = "<samp>{}</samp>".format(str(data.tolist()))
+    elif isinstance(data, QTemporalList):
+        html = "<samp>{}</samp>".format(str(convert_qtemporal(data)))
+    else:
+        html = "<samp>{}</samp>".format(str(data))
+    return html
+
+
+def convert_qtemporal(data):
+    sane = [str(i.raw) for i in data]
+    return sane
+
+
+def qtable_to_html(q_table):
+    html = qtable_to_dataframe(q_table).to_html(
+        max_rows=100, escape=False).replace('border="1" class="dataframe"', 'class="table table-striped"')
+    return html
