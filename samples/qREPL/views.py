@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, session, flash
 from qpython.qtype import QException
 
 from flask_kdb import get_kdb
+from flask_kdb.utils import get_q_status, convert_qdata
 from . import app
-from .convert import get_q_status, convert_qdata
 
 
 @app.before_first_request

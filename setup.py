@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='flask-kdb',
+    name='flask_kdb',
     version='0.1',
     py_modules=[
-        'flask_kdb'
+        'flask_kdb', 'flask_kdb.utils'
     ],
-    url='github.com/buckie/flask-kdb',
+    url='github.com/buckie/flask_kdb',
     license='MIT',
     author='wjm',
     keywords=['kdb+'],
